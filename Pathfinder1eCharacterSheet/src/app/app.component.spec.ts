@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'BlankMaterialTheme'`, () => {
+  it(`should have as title 'Pathfinder1eCharacterSheet'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('BlankMaterialTheme');
+    expect(app.title).toEqual('Pathfinder1eCharacterSheet');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('BlankMaterialTheme app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('Pathfinder1eCharacterSheet app is running!');
   });
 });
