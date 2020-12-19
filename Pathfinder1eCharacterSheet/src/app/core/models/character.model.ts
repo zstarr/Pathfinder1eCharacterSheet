@@ -1,5 +1,5 @@
 export class Character {
-
+  id: number;
   characterName: string;
   alignment: string;
   level: number;

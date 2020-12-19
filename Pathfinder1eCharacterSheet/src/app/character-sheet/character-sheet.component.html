@@ -1,86 +1,161 @@
-<div #general></div>
-<mat-card class="parent-card">
-  <mat-card-header>
-    <div mat-card-avatar>
-        <mat-icon class="avatar-icon">account_circle</mat-icon>
-    </div>
-    <mat-card-title>General</mat-card-title>
-    <mat-card-subtitle>Character Information</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    <!-- Char Name -->
-    <mat-form-field appearance="standard">
-      <mat-label>Character Name</mat-label>
-      <input matInput placeholder="Character Name">
-      <!-- <mat-hint>Character Name</mat-hint> -->
-    </mat-form-field>
+<form [formGroup]="charEdit" (ngSubmit)="onSubmit()">
+  <div #general></div>
+  <mat-card class="parent-card">
+    <mat-card-header>
+      <div mat-card-avatar>
+          <mat-icon class="avatar-icon">account_circle</mat-icon>
+      </div>
+      <mat-card-title>General</mat-card-title>
+      <mat-card-subtitle>Character Information</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
 
-    <!-- Alignment -->
-    <mat-form-field appearance="fill">
-      <mat-label>Alignment</mat-label>
-      <mat-select>
-        <mat-option value="lg">Lawful Good</mat-option>
-        <mat-option value="ng">Neutral Good</mat-option>
-        <mat-option value="cg">Chaotic Good</mat-option>
-        <mat-option value="ln">Lawful Neutral</mat-option>
-        <mat-option value="tn">Neutral</mat-option>
-        <mat-option value="cn">Chaotic Neutral</mat-option>
-        <mat-option value="le">Lawful Evil</mat-option>
-        <mat-option value="ne">Neutral Evil</mat-option>
-        <mat-option value="ce">Chaotic Evil</mat-option>
-      </mat-select>
-      <!-- <mat-hint>Alignment</mat-hint> -->
-    </mat-form-field>
-  </mat-card-content>
-</mat-card>
+      <!-- Char Name -->
+      <mat-form-field appearance="standard">
+        <mat-label>Character Name</mat-label>
+        <input matInput placeholder="Character Name" formControlName="characterName">
+      </mat-form-field>
 
-<div #abilities></div>
-<mat-card class="parent-card">
-  <mat-card-header>
-    <div mat-card-avatar>
-        <mat-icon class="avatar-icon">psychology</mat-icon>
-    </div>
-    <mat-card-title>Abilities</mat-card-title>
-    <mat-card-subtitle>Charisma is a dumb stat...</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
+      <!-- Alignment -->
+      <mat-form-field appearance="fill">
+        <mat-label>Alignment</mat-label>
+        <mat-select formControlName="alignment">
+          <mat-option value="lg">Lawful Good</mat-option>
+          <mat-option value="ng">Neutral Good</mat-option>
+          <mat-option value="cg">Chaotic Good</mat-option>
+          <mat-option value="ln">Lawful Neutral</mat-option>
+          <mat-option value="tn">Neutral</mat-option>
+          <mat-option value="cn">Chaotic Neutral</mat-option>
+          <mat-option value="le">Lawful Evil</mat-option>
+          <mat-option value="ne">Neutral Evil</mat-option>
+          <mat-option value="ce">Chaotic Evil</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  </mat-card-content>
-</mat-card>
+      <!-- Level -->
+      <mat-form-field appearance="standard">
+        <mat-label>Character Level</mat-label>
+        <input matInput placeholder="Character Name" formControlName="level" type="number" min="1" max="20">
+      </mat-form-field>
 
-<div #spells></div>
-<mat-card class="parent-card">
-  <mat-card-header>
-    <div mat-card-avatar>
-        <mat-icon class="avatar-icon">offline_bolt</mat-icon>
-    </div>
-    <mat-card-title>Spells</mat-card-title>
-    <mat-card-subtitle>And Powers</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
+      <!-- Diety -->
+      <mat-form-field appearance="standard">
+        <mat-label>Diety</mat-label>
+        <input matInput placeholder="Diety" formControlName="diety">
+      </mat-form-field>
 
-  </mat-card-content>
-</mat-card>
+      <!-- Homeland -->
+      <mat-form-field appearance="standard">
+        <mat-label>Homeland</mat-label>
+        <input matInput placeholder="Homeland" formControlName="homeland">
+      </mat-form-field>
+
+      <!-- Race -->
+      <mat-form-field appearance="standard">
+        <mat-label>Race</mat-label>
+        <input matInput placeholder="Race" formControlName="race">
+      </mat-form-field>
+
+      <!-- Size -->
+      <mat-form-field appearance="standard">
+        <mat-label>Size</mat-label>
+        <input matInput placeholder="Size" formControlName="size">
+      </mat-form-field>
+
+      <!-- Gender -->
+      <mat-form-field appearance="standard">
+        <mat-label>Gender</mat-label>
+        <input matInput placeholder="Gender" formControlName="gender">
+      </mat-form-field>
+
+      <!-- Age -->
+      <mat-form-field appearance="standard">
+        <mat-label>Age</mat-label>
+        <input matInput placeholder="Age" formControlName="age" type="number" min="0">
+      </mat-form-field>
+
+      <!-- Height -->
+      <mat-form-field appearance="standard">
+        <mat-label>Height</mat-label>
+        <input matInput placeholder="Height" formControlName="height">
+      </mat-form-field>
+
+      <!-- Weight -->
+      <mat-form-field appearance="standard">
+        <mat-label>Weight</mat-label>
+        <input matInput placeholder="Weight" formControlName="weight">
+      </mat-form-field>
+
+      <!-- Hair -->
+      <mat-form-field appearance="standard">
+        <mat-label>Hair</mat-label>
+        <input matInput placeholder="Hair" formControlName="hair">
+      </mat-form-field>
+
+      <!-- Eyes -->
+      <mat-form-field appearance="standard">
+        <mat-label>Eyes</mat-label>
+        <input matInput placeholder="Eyes" formControlName="eyes">
+      </mat-form-field>
+
+    </mat-card-content>
+  </mat-card>
+
+  <div #abilities></div>
+  <mat-card class="parent-card">
+    <mat-card-header>
+      <div mat-card-avatar>
+          <mat-icon class="avatar-icon">psychology</mat-icon>
+      </div>
+      <mat-card-title>Abilities</mat-card-title>
+      <mat-card-subtitle>Charisma is a dumb stat...</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+
+    </mat-card-content>
+  </mat-card>
+
+  <div #spells></div>
+  <mat-card class="parent-card">
+    <mat-card-header>
+      <div mat-card-avatar>
+          <mat-icon class="avatar-icon">offline_bolt</mat-icon>
+      </div>
+      <mat-card-title>Spells</mat-card-title>
+      <mat-card-subtitle>And Powers</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+
+    </mat-card-content>
+  </mat-card>
 
 
-<mat-toolbar color="primary">
-  <button mat-icon-button (click)="scroll(general)">
-    <mat-icon>account_circle</mat-icon>
-  </button>
-  <button mat-icon-button (click)="scroll(abilities)">
-    <mat-icon>psychology</mat-icon>
-  </button>
-  <button mat-icon-button (click)="scroll(spells)">
-    <mat-icon>offline_bolt</mat-icon>
-  </button>
-  <span class="example-spacer"></span>
-  <button mat-icon-button>
-    <mat-icon>share</mat-icon>
-  </button>
-  <button mat-icon-button>
-    <mat-icon>print</mat-icon>
-  </button>
-  <button mat-icon-button>
-    <mat-icon>download</mat-icon>
-  </button>
-</mat-toolbar>
+
+  <mat-toolbar color="primary">
+    <button mat-icon-button (click)="scroll(general)">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <button mat-icon-button (click)="scroll(abilities)">
+      <mat-icon>psychology</mat-icon>
+    </button>
+    <button mat-icon-button (click)="scroll(spells)">
+      <mat-icon>offline_bolt</mat-icon>
+    </button>
+    <span class="example-spacer"></span>
+    <button mat-icon-button>
+      <mat-icon>create</mat-icon>
+    </button>
+    <button mat-icon-button>
+      <mat-icon>save</mat-icon>
+    </button>
+    <button mat-icon-button>
+      <mat-icon>share</mat-icon>
+    </button>
+    <button mat-icon-button>
+      <mat-icon>print</mat-icon>
+    </button>
+    <button mat-icon-button>
+      <mat-icon>download</mat-icon>
+    </button>
+  </mat-toolbar>
+</form>
