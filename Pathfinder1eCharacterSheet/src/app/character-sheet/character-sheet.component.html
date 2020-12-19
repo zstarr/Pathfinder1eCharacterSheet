@@ -1,0 +1,86 @@
+<div #general></div>
+<mat-card class="parent-card">
+  <mat-card-header>
+    <div mat-card-avatar>
+        <mat-icon class="avatar-icon">account_circle</mat-icon>
+    </div>
+    <mat-card-title>General</mat-card-title>
+    <mat-card-subtitle>Character Information</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <!-- Char Name -->
+    <mat-form-field appearance="standard">
+      <mat-label>Character Name</mat-label>
+      <input matInput placeholder="Character Name">
+      <!-- <mat-hint>Character Name</mat-hint> -->
+    </mat-form-field>
+
+    <!-- Alignment -->
+    <mat-form-field appearance="fill">
+      <mat-label>Alignment</mat-label>
+      <mat-select>
+        <mat-option value="lg">Lawful Good</mat-option>
+        <mat-option value="ng">Neutral Good</mat-option>
+        <mat-option value="cg">Chaotic Good</mat-option>
+        <mat-option value="ln">Lawful Neutral</mat-option>
+        <mat-option value="tn">Neutral</mat-option>
+        <mat-option value="cn">Chaotic Neutral</mat-option>
+        <mat-option value="le">Lawful Evil</mat-option>
+        <mat-option value="ne">Neutral Evil</mat-option>
+        <mat-option value="ce">Chaotic Evil</mat-option>
+      </mat-select>
+      <!-- <mat-hint>Alignment</mat-hint> -->
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>
+
+<div #abilities></div>
+<mat-card class="parent-card">
+  <mat-card-header>
+    <div mat-card-avatar>
+        <mat-icon class="avatar-icon">psychology</mat-icon>
+    </div>
+    <mat-card-title>Abilities</mat-card-title>
+    <mat-card-subtitle>Charisma is a dumb stat...</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+
+  </mat-card-content>
+</mat-card>
+
+<div #spells></div>
+<mat-card class="parent-card">
+  <mat-card-header>
+    <div mat-card-avatar>
+        <mat-icon class="avatar-icon">offline_bolt</mat-icon>
+    </div>
+    <mat-card-title>Spells</mat-card-title>
+    <mat-card-subtitle>And Powers</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+
+  </mat-card-content>
+</mat-card>
+
+
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="scroll(general)">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  <button mat-icon-button (click)="scroll(abilities)">
+    <mat-icon>psychology</mat-icon>
+  </button>
+  <button mat-icon-button (click)="scroll(spells)">
+    <mat-icon>offline_bolt</mat-icon>
+  </button>
+  <span class="example-spacer"></span>
+  <button mat-icon-button>
+    <mat-icon>share</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon>print</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon>download</mat-icon>
+  </button>
+</mat-toolbar>

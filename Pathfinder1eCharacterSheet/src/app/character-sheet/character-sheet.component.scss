@@ -1,0 +1,24 @@
+mat-toolbar {
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.parent-card {
+  max-width: 1000px;
+  width: 90%;
+  margin: 10px auto;
+}
+
+mat-form-field {
+  padding: 5px 5px 5px 5px;
+}
+
+.avatar-icon {
+  font-size: 40px;
+}
