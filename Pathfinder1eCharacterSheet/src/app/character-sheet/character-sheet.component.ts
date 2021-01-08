@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
 import { Character } from '../core/models/character.model';
 import { CharacterService } from '../core/services/character.service';
 
@@ -29,10 +28,6 @@ export class CharacterSheetComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-  }
-
-  successCallback(data: FirebaseUISignInSuccessWithAuthResult) {
-    console.log(data);
   }
 
   scroll(el: HTMLElement) {

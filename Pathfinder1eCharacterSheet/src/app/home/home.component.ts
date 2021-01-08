@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 // import {FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult} from 'firebaseui-angular';
 // import {Router} from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 
 @Component({
@@ -12,29 +13,19 @@ import firebase from 'firebase/app';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public auth: AngularFireAuth) { }
+  constructor(
+    public auth: AngularFireAuth,
+    public router: Router
+    ) {
+      this.auth.user ? this.router.navigate(['character']) : null;
+    }
 
   ngOnInit(): void {
   }
 
-  // logout() {
-  //   this.afAuth.signOut();
-  // }
-
-  // successCallback(data: FirebaseUISignInSuccessWithAuthResult) {
-  //   console.log('successCallback', data);
-  //   this.router.navigate(['character']);
-  // }
-
-  // errorCallback(data: FirebaseUISignInFailure) {
-  //   console.warn('errorCallback', data);
-  // }
-
-  // uiShownCallback() {
-  //   console.log('UI shown');
-  // }
   login() {
     this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    this.router.navigate(['characters']);
   }
   logout() {
     this.auth.signOut();

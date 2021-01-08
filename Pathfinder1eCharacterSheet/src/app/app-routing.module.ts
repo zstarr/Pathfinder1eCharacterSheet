@@ -8,7 +8,7 @@ import { AngularFireAuthGuard, hasCustomClaim, redirectUnauthorizedTo, redirectL
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['home']);
 
 const routes: Routes = [
-  { path: 'characters', component: CharacterSheetComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+  { path: 'character', component: CharacterSheetComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
   { path: '**', component: HomeComponent }
 ];
 

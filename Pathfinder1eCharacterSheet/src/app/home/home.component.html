@@ -6,6 +6,7 @@
 
 <div *ngIf="auth.user | async as user; else showLogin">
   <h1>Hello {{ user.displayName }}!</h1>
+  <h2>Please select a character to continue.</h2>
   <button (click)="logout()">Logout</button>
 </div>
 <ng-template #showLogin>

@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Character } from './core/models/character.model';
 import { CharacterService } from './core/services/character.service';
 import { Observable } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-root',
@@ -18,12 +19,16 @@ export class AppComponent {
 
   characters: Character[];
 
-  constructor(private characterService: CharacterService) {
+  constructor(
+    private characterService: CharacterService,
+    public auth: AngularFireAuth
+    ) {
     this.characterService.characters.subscribe(chars => this.characters = chars);
   }
 
   loadCharacter(char: Character) {
     this.characterService.loadCharacter(char);
     this.sidenav.toggle();
+
   }
 }
