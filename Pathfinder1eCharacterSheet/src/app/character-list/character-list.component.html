@@ -1,0 +1,12 @@
+<div mat-subheader>Characters:</div>
+<div class="mat-list">
+  <mat-selection-list #chars [multiple]="false">
+    <mat-list-option
+      *ngFor="let char of characters"
+      [value]="char"
+      (click)="loadCharacter(char)"
+    >
+      {{ char.characterName }}
+    </mat-list-option>
+  </mat-selection-list>
+</div>

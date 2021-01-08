@@ -1,0 +1,9 @@
+.google-login {
+  width: 191px;
+  height: 46px;
+  background: url("/assets/google/btn_google_signin_dark_normal_web.png") no-repeat;
+  display: inline-block;
+}
+.google-login:hover {
+  background: url("/assets/google/btn_google_signin_dark_focus_web.png") no-repeat;
+}

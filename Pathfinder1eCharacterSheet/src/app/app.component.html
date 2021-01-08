@@ -11,16 +11,8 @@
 <mat-drawer-container class="sidenav-container" autosize>
   <mat-drawer #drawer class="sidenav" mode="over">
     <div *ngIf="auth.user | async as user; else showLogin">
-      <div mat-subheader>Characters:</div>
-      <mat-selection-list #chars [multiple]="false">
-        <mat-list-option
-          *ngFor="let char of characters"
-          [value]="char"
-          (click)="loadCharacter(char)"
-        >
-          {{ char.characterName }}
-        </mat-list-option>
-      </mat-selection-list>
+      <app-character-list [sidenav]="sidenav"></app-character-list>
+      <button mat-raised-button color="primary" (click)="logout()" class="logout">Logout</button>
     </div>
     <ng-template #showLogin><p>You must be logged in to see characters.</p></ng-template>
   </mat-drawer>

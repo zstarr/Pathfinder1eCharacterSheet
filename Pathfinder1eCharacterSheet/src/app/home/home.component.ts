@@ -17,14 +17,14 @@ export class HomeComponent implements OnInit {
     public auth: AngularFireAuth,
     public router: Router
     ) {
-      this.auth.user ? this.router.navigate(['character']) : null;
+      this.auth.user ? this.router.navigate(['characters']) : null;
     }
 
   ngOnInit(): void {
   }
 
-  login() {
-    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  async login() {
+    await this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
     this.router.navigate(['characters']);
   }
   logout() {

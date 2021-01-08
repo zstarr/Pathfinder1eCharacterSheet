@@ -49,9 +49,10 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from "@angular/fire/database";
+import { CharacterListComponent } from './character-list/character-list.component';
 
 @NgModule({
-  declarations: [AppComponent, CharacterSheetComponent, HomeComponent],
+  declarations: [AppComponent, CharacterSheetComponent, HomeComponent, CharacterListComponent],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),

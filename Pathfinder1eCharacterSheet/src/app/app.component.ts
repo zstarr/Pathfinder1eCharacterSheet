@@ -1,9 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Character } from './core/models/character.model';
-import { CharacterService } from './core/services/character.service';
-import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-root',
@@ -17,18 +16,23 @@ export class AppComponent {
   showFiller: boolean = false;
   title = 'Pathfinder1eCharacterSheet';
 
-  characters: Character[];
-
   constructor(
-    private characterService: CharacterService,
-    public auth: AngularFireAuth
+
+    public auth: AngularFireAuth,
+    private router: Router
     ) {
-    this.characterService.characters.subscribe(chars => this.characters = chars);
-  }
-
-  loadCharacter(char: Character) {
-    this.characterService.loadCharacter(char);
-    this.sidenav.toggle();
 
   }
+
+  login() {
+    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    this.router.navigate(['characters']);
+  }
+
+  logout() {
+    this.auth.signOut();
+    this.sidenav ? this.sidenav.toggle() : null;
+    this.router.navigate(['home']);
+  }
+
 }

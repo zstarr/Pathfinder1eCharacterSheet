@@ -1,0 +1,10 @@
+.mat-list {
+  height: calc(100vh - 211px);
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  overflow-y: scroll;
+}
+
+.mat-list::-webkit-scrollbar {
+  display: none;
+}
