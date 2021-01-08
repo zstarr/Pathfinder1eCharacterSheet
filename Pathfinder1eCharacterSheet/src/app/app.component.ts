@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Character } from './core/models/character.model';
 import { CharacterService } from './core/services/character.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
