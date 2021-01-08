@@ -19,7 +19,7 @@ export class CharacterSheetComponent implements OnInit {
     private fb: FormBuilder,
     private afAuth: AngularFireAuth
   ) {
-    this.afAuth.authState.subscribe(d => console.log(d));
+    this.afAuth.authState.subscribe();//d => console.log('auth state stuff'));
     this.characterService.activeCharacter.subscribe((character) => {
       this.character = character;
       this.initForm();
@@ -37,7 +37,7 @@ export class CharacterSheetComponent implements OnInit {
   onSubmit() {}
 
   initForm() {
-    console.log(this.character);
+    //console.log(this.character);
     this.charEdit = this.fb.group({
       characterName: [this.character?.characterName],
       alignment: [this.character?.alignment ? this.character.alignment : ''],
