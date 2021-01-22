@@ -5,6 +5,7 @@ import { Character } from '../core/models/character.model';
 import { CharacterService } from '../core/services/character.service';
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-character-sheet',
@@ -20,7 +21,8 @@ export class CharacterSheetComponent implements OnInit {
     private characterService: CharacterService,
     private fb: FormBuilder,
     private afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) {
     this.afAuth.authState.subscribe();//d => console.log('auth state stuff'));
     this.characterService.activeCharacter.subscribe((character) => {
@@ -71,4 +73,25 @@ export class CharacterSheetComponent implements OnInit {
     this.characterService.saveCharacter(this.character);
   }
 
+  openDialog() {
+    const dialogRef = this.dialog.open(CharacterDeleteDialog);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteForever();
+      }
+    });
+  }
+
+  deleteForever() {
+    this.characterService.deleteCharacter(this.character);
+    this.router.navigate(['characters']);
+  }
+
 }
+
+@Component({
+  selector: 'character-delete',
+  templateUrl: 'character-delete.html',
+})
+export class CharacterDeleteDialog {}

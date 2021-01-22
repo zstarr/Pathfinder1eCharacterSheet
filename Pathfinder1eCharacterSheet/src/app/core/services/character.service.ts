@@ -60,4 +60,9 @@ export class CharacterService {
     var charTable = this.database.object(this.characterDbString + '/' + id);
     charTable.set(newChar);
   }
+
+  deleteCharacter(character: Character) {
+    var charTable = this.database.object(this.characterDbString + '/' + character.id);
+    charTable.remove();
+  }
 }

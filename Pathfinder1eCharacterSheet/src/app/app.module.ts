@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CharacterSheetComponent } from './character-sheet/character-sheet.component';
+import { CharacterDeleteDialog, CharacterSheetComponent } from './character-sheet/character-sheet.component';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -52,7 +52,7 @@ import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { CharacterListComponent } from './character-list/character-list.component';
 
 @NgModule({
-  declarations: [AppComponent, CharacterSheetComponent, HomeComponent, CharacterListComponent],
+  declarations: [AppComponent, CharacterSheetComponent, CharacterDeleteDialog, HomeComponent, CharacterListComponent],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
