@@ -14,8 +14,6 @@ export class CharacterService {
 
   activeCharacter = this.character.asObservable();
 
-  characterIds: number[];
-
   database: AngularFireDatabase;
   user: firebase.User;
 
@@ -23,15 +21,12 @@ export class CharacterService {
     null
   );
 
-  constructor(private db: AngularFireDatabase)
-  {
+  constructor(private db: AngularFireDatabase) {
     this.database = db;
   }
 
   loadCharacter(newCharacter: Character) {
     this.character.next(newCharacter);
-    console.log(newCharacter);
-    this.saveCharacter(newCharacter);
   }
 
   updateCharacters(uid: string) {
@@ -50,7 +45,19 @@ export class CharacterService {
     );
     charTable
       .update(character)
-      .then(() => console.log('character submitted'))
+      //.then(() => )
       .catch((error) => console.log('error saving char: ', error));
+  }
+
+  newCharacter() {
+    var id = this.characters.value.length;
+    if (!id) {
+      id = 0;
+    }
+    let newChar = new Character();
+    newChar.id = id;
+    newChar.characterName = "New Character";
+    var charTable = this.database.object(this.characterDbString + '/' + id);
+    charTable.set(newChar);
   }
 }

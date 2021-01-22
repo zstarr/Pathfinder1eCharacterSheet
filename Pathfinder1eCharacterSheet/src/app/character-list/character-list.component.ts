@@ -37,4 +37,8 @@ export class CharacterListComponent implements OnInit {
     this.router.navigate(['character']);
   }
 
+  addCharacter() {
+    this.characterService.newCharacter();
+  }
+
 }

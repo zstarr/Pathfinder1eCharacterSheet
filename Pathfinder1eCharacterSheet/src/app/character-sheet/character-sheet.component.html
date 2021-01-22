@@ -1,4 +1,4 @@
-<form [formGroup]="charEdit" (ngSubmit)="onSubmit()">
+<form [formGroup]="charEdit">
   <div #general></div>
   <mat-card class="parent-card">
     <mat-card-header>
@@ -35,7 +35,7 @@
       <!-- Level -->
       <mat-form-field appearance="standard">
         <mat-label>Character Level</mat-label>
-        <input matInput placeholder="Character Name" formControlName="level" type="number" min="1" max="20">
+        <input matInput placeholder="Character Level" formControlName="level" type="number" min="1" max="20">
       </mat-form-field>
 
       <!-- Diety -->
