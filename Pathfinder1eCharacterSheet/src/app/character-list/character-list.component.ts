@@ -8,31 +8,26 @@ import { AngularFireAuth } from '@angular/fire/auth';
 @Component({
   selector: 'app-character-list',
   templateUrl: './character-list.component.html',
-  styleUrls: ['./character-list.component.scss']
+  styleUrls: ['./character-list.component.scss'],
 })
 export class CharacterListComponent implements OnInit {
-
-  @Input() sidenav: MatSidenav
+  @Input() sidenav: MatSidenav;
   characters: Character[];
 
   constructor(
     private characterService: CharacterService,
     private router: Router,
     private afAuth: AngularFireAuth
-    ) {
-      this.afAuth.authState.subscribe(authState => {
-      if(authState?.uid) {
-        characterService.updateCharacters(authState?.uid);
-      }
-    });
-      this.characterService.characters.subscribe(chars => this.characters = chars);
+  ) {
+    this.characterService.characters.subscribe(
+      (chars) => (this.characters = chars)
+    );
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   loadCharacter(char: Character) {
-    this.characterService.loadCharacter(char);
+    this.characterService.loadCharacter(char.id);
     this.sidenav ? this.sidenav.toggle() : null;
     this.router.navigate(['character']);
   }
@@ -40,5 +35,4 @@ export class CharacterListComponent implements OnInit {
   addCharacter() {
     this.characterService.newCharacter();
   }
-
 }

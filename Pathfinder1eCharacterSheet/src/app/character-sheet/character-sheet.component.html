@@ -1,4 +1,4 @@
-<form [formGroup]="charEdit">
+<form [formGroup]="charEdit" *ngIf="character | async; else loading">
   <div #general></div>
   <mat-card class="parent-card">
     <mat-card-header>
@@ -154,8 +154,11 @@
     <button mat-icon-button>
       <mat-icon>print</mat-icon>
     </button>
-    <button mat-icon-button>
+    <button mat-icon-button (click)="printCharacter()">
       <mat-icon>download</mat-icon>
     </button>
   </mat-toolbar>
 </form>
+<ng-template #loading>
+  Loading User...
+</ng-template>

@@ -3,9 +3,15 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Character } from '../core/models/character.model';
 import { CharacterService } from '../core/services/character.service';
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import {
+  debounceTime,
+  distinctUntilChanged,
+  pairwise,
+  tap,
+} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-character-sheet',
@@ -13,9 +19,10 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./character-sheet.component.scss'],
 })
 export class CharacterSheetComponent implements OnInit {
-  character: Character;
+  character: Observable<any>;
 
   charEdit: FormGroup;
+  charReference: Character;
 
   constructor(
     private characterService: CharacterService,
@@ -24,18 +31,26 @@ export class CharacterSheetComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog
   ) {
-    this.afAuth.authState.subscribe();//d => console.log('auth state stuff'));
-    this.characterService.activeCharacter.subscribe((character) => {
-      if (!character) router.navigate(['characters']);
-      this.character = character;
-      this.initForm();
-      this.onChanges();
-    });
+    this.initForm();
+    this.character = this.characterService.subscribeCharacter().pipe(
+      tap((char) => {
+        if (char) this.charEdit.patchValue(char);
+      })
+    );
+
+    this.character.subscribe(
+      (char) => {
+        this.charReference = char;
+        this.initForm();
+        this.onChanges();
+      },
+      (err) => {
+        router.navigate(['characters']);
+      }
+    );
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   scroll(el: HTMLElement) {
     el.scrollIntoView();
@@ -43,40 +58,35 @@ export class CharacterSheetComponent implements OnInit {
 
   initForm() {
     this.charEdit = this.fb.group({
-      characterName: [this.character?.characterName],
-      alignment: [this.character?.alignment ? this.character.alignment : ''],
-      level: [this.character?.level ? this.character.level : ''],
-      diety: [this.character?.diety ? this.character.diety : ''],
-      homeland: [this.character?.homeland ? this.character.homeland : ''],
-      race: [this.character?.race ? this.character.race : ''],
-      size: [this.character?.size ? this.character.size : ''],
-      gender: [this.character?.gender ? this.character.gender : ''],
-      age: [this.character?.age ? this.character.age : ''],
-      height: [this.character?.height ? this.character.height : ''],
-      weight: [this.character?.weight ? this.character.weight : ''],
-      hair: [this.character?.hair ? this.character.hair : ''],
-      eyes: [this.character?.eyes ? this.character.eyes : ''],
+      id: [''],
+      characterName: [''],
+      alignment: [''],
+      level: [''],
+      diety: [''],
+      homeland: [''],
+      race: [''],
+      size: [''],
+      gender: [''],
+      age: [''],
+      height: [''],
+      weight: [''],
+      hair: [''],
+      eyes: [''],
     });
   }
 
   onChanges() {
-    this.charEdit.valueChanges.pipe(debounceTime(500), distinctUntilChanged()).subscribe(val => {
-      this.updateCharacterValues();
-    });
-
-  }
-
-  updateCharacterValues() {
-    for (const field in this.charEdit.controls) {
-      this.character[field] = this.charEdit.controls[field].value;
-    }
-    this.characterService.saveCharacter(this.character);
+    this.charEdit.valueChanges
+      .pipe(debounceTime(500), distinctUntilChanged(), pairwise())
+      .subscribe(([prevVal, nextVal]: [any, any]) => {
+        this.characterService.saveCharacter(nextVal);
+      });
   }
 
   openDialog() {
     const dialogRef = this.dialog.open(CharacterDeleteDialog);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.deleteForever();
       }
@@ -84,10 +94,13 @@ export class CharacterSheetComponent implements OnInit {
   }
 
   deleteForever() {
-    this.characterService.deleteCharacter(this.character);
+    this.characterService.deleteCharacter(this.charReference);
     this.router.navigate(['characters']);
   }
 
+  printCharacter() {
+    console.log(this.character);
+  }
 }
 
 @Component({
