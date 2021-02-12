@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
+import { CharacterService } from './core/services/character.service';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +18,9 @@ export class AppComponent {
   title = 'Pathfinder1eCharacterSheet';
 
   constructor(
-
     public auth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private charService: CharacterService
     ) {
 
   }
@@ -30,6 +31,7 @@ export class AppComponent {
   }
 
   logout() {
+    this.charService.logout();
     this.auth.signOut();
     this.sidenav ? this.sidenav.toggle() : null;
     this.router.navigate(['home']);

@@ -24,6 +24,11 @@ export class CharacterService {
     null
   );
 
+  afUserSub: Subscription;
+  loadedCharacterSub: Subscription;
+  lastViewedSub: Subscription;
+  updateCharsSub: Subscription;
+
   constructor(
     private db: AngularFireDatabase,
     private afAuth: AngularFireAuth
@@ -33,19 +38,18 @@ export class CharacterService {
       if (user?.uid) {
         this.characterDbString = 'users/' + user.uid + '/pathfinder1echaractersheets';
         this.updateCharacters();
-        this.getLastViewedCharacter();
+        this.lastViewedSub = this.getLastViewedCharacter();
       }
     });
   }
 
   loadCharacter(id: number) {
-    this.db.object(this.characterDbString + '/characters/' + id).valueChanges().subscribe(char => {
+    this.afUserSub = this.loadedCharacterSub = this.db.object(this.characterDbString + '/characters/' + id).valueChanges().subscribe(char => {
       if(char) {
         this.character.next(char as Character);
         this.updateLastViewedCharacterById(id);
       }
     });
-
   }
 
   subscribeCharacter(): Observable<any> {
@@ -65,7 +69,7 @@ export class CharacterService {
   }
 
   updateCharacters() {
-    this.database
+    this.updateCharsSub = this.database
       .list<Character>(this.characterDbString + '/characters')
       .valueChanges()
       .subscribe((chars) => {
@@ -101,8 +105,13 @@ export class CharacterService {
     .object(this.characterDbString + '/lastViewedCharacter').set(id);
   }
 
-  newUserCheck() {
-
+  logout() {
+    if (this.afUserSub) this.afUserSub.unsubscribe();
+    if (this.character) this.character.unsubscribe();
+    if (this.lastViewedSub) this.lastViewedSub.unsubscribe();
+    if (this.loadedCharacterSub) this.loadedCharacterSub.unsubscribe();
+    if (this.updateCharsSub) this.updateCharsSub.unsubscribe();
+    if (this.characters) this.characters.unsubscribe();
   }
 
 }
