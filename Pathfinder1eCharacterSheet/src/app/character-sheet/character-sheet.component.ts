@@ -11,7 +11,7 @@ import {
 } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-character-sheet',
@@ -24,6 +24,13 @@ export class CharacterSheetComponent implements OnInit {
   charEdit: FormGroup;
   charReference: Character;
 
+  strMod = new BehaviorSubject<number>(0);
+  dexMod = new BehaviorSubject<number>(0);
+  conMod = new BehaviorSubject<number>(0);
+  intMod = new BehaviorSubject<number>(0);
+  wisMod = new BehaviorSubject<number>(0);
+  chaMod = new BehaviorSubject<number>(0);
+
   constructor(
     private characterService: CharacterService,
     private fb: FormBuilder,
@@ -35,19 +42,22 @@ export class CharacterSheetComponent implements OnInit {
     this.character = this.characterService.subscribeCharacter().pipe(
       tap((char) => {
         this.initForm();
+        this.updateCalculatedFields();
         this.onChanges();
         if (char) this.charEdit.patchValue(char);
+
       })
     );
-
     this.character.subscribe(
       (char) => {
         this.charReference = char;
+        this.updateCalculatedFields()
       },
       (err) => {
         router.navigate(['characters']);
       }
     );
+
   }
 
   ngOnInit(): void {}
@@ -72,7 +82,22 @@ export class CharacterSheetComponent implements OnInit {
       weight: [''],
       hair: [''],
       eyes: [''],
+      strAbilityScore: [''],
+      tempStrengthScore: [''],
+      dexAbilityScore: [''],
+      tempDexScore: [''],
+      conAbilityScore: [''],
+      tempConScore:['']
     });
+  }
+
+  updateCalculatedFields() {
+    this.strMod.next(Math.floor((this.charReference?.strAbilityScore - 10) / 2));
+    this.dexMod.next(Math.floor((this.charReference?.dexAbilityScore - 10) / 2));
+    this.conMod.next(Math.floor((this.charReference?.conAbilityScore - 10) / 2));
+    //this.intMod.next(Math.floor((this.charReference?.intAbilityScore - 10) / 2));
+    //this.wisMod.next(Math.floor((this.charReference?.wisAbilityScore - 10) / 2));
+    //this.chaMod.next(Math.floor((this.charReference?.chaAbilityScore - 10) / 2));
   }
 
   onChanges() {

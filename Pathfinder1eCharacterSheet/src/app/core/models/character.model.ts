@@ -14,5 +14,12 @@ export class Character {
   hair: string;
   eyes: string;
 
+  strAbilityScore: number;
+  tempStrScore: number;
+  dexAbilityScore: number;
+  tempDexScore: number;
+  conAbilityScore: number;
+  tempConScore: number;
+
   maxHp: number;
 }
