@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Character } from '../models/character.model';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +31,7 @@ export class CharacterService {
   updateCharsSub: Subscription;
 
   constructor(
+    private router: Router,
     private db: AngularFireDatabase,
     private afAuth: AngularFireAuth
     ) {
@@ -74,6 +76,7 @@ export class CharacterService {
       .valueChanges()
       .subscribe((chars) => {
         this.characters.next(chars);
+        if(chars.length == 0) this.router.navigate(['characters'])
       });
   }
 
