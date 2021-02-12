@@ -39,10 +39,13 @@ export class CharacterService {
   }
 
   loadCharacter(id: number) {
-    this.updateLastViewedCharacterById(id);
-    this.db.object(this.characterDbString + '/' + id).valueChanges().subscribe(char => {
-      this.character.next(char as Character);
-    })
+    this.db.object(this.characterDbString + '/characters/' + id).valueChanges().subscribe(char => {
+      if(char) {
+        this.character.next(char as Character);
+        this.updateLastViewedCharacterById(id);
+      }
+    });
+
   }
 
   subscribeCharacter(): Observable<any> {
@@ -57,13 +60,13 @@ export class CharacterService {
     let newChar = new Character();
     newChar.id = id;
     newChar.characterName = "New Character";
-    var charTable = this.database.object(this.characterDbString + '/' + id);
+    var charTable = this.database.object(this.characterDbString + '/characters/' + id);
     charTable.set(newChar);
   }
 
   updateCharacters() {
     this.database
-      .list<Character>(this.characterDbString)
+      .list<Character>(this.characterDbString + '/characters')
       .valueChanges()
       .subscribe((chars) => {
         this.characters.next(chars);
@@ -72,7 +75,7 @@ export class CharacterService {
 
   saveCharacter(character: Character) {
     var charTable = this.database.object(
-      this.characterDbString + '/' + character.id
+      this.characterDbString + '/characters/' + character.id
     );
     charTable
       .update(character)
@@ -81,7 +84,7 @@ export class CharacterService {
   }
 
   deleteCharacter(character: Character) {
-    this.database.object(this.characterDbString + '/' + character.id).remove();
+    this.database.object(this.characterDbString + '/characters/' + character.id).remove();
   }
 
   getLastViewedCharacter(): Subscription {
@@ -96,6 +99,10 @@ export class CharacterService {
   updateLastViewedCharacterById(id: number) {
     this.database
     .object(this.characterDbString + '/lastViewedCharacter').set(id);
+  }
+
+  newUserCheck() {
+
   }
 
 }

@@ -34,6 +34,8 @@ export class CharacterSheetComponent implements OnInit {
     this.initForm();
     this.character = this.characterService.subscribeCharacter().pipe(
       tap((char) => {
+        this.initForm();
+        this.onChanges();
         if (char) this.charEdit.patchValue(char);
       })
     );
@@ -41,8 +43,6 @@ export class CharacterSheetComponent implements OnInit {
     this.character.subscribe(
       (char) => {
         this.charReference = char;
-        this.initForm();
-        this.onChanges();
       },
       (err) => {
         router.navigate(['characters']);
