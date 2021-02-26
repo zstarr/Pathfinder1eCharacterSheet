@@ -112,13 +112,9 @@ export class CharacterService {
   }
 
   logout() {
-    if (this.afAuthSub) this.afAuthSub.unsubscribe();
-    if (this.afUserSub) this.afUserSub.unsubscribe();
-    if (this.character) this.character.unsubscribe();
     if (this.lastViewedSub) this.lastViewedSub.unsubscribe();
     if (this.loadedCharacterSub) this.loadedCharacterSub.unsubscribe();
     if (this.updateCharsSub) this.updateCharsSub.unsubscribe();
-    if (this.characters) this.characters.unsubscribe();
   }
 
 }
