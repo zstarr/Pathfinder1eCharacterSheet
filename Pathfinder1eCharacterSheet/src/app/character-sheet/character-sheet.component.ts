@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Character } from '../core/models/character.model';
@@ -19,18 +19,21 @@ import { BehaviorSubject, Observable } from 'rxjs';
   styleUrls: ['./character-sheet.component.scss'],
 })
 export class CharacterSheetComponent implements OnInit {
+
+  Math = Math;
+
   character: Observable<any>;
 
   charEdit: FormGroup;
   charReference: Character;
 
-  strMod = new BehaviorSubject<number>(0);
+  get strMod(): number { return Math.floor((this.charReference?.strAbilityScore + this.charReference?.tempStrScore - 10) / 2) };
   dexMod = new BehaviorSubject<number>(0);
   conMod = new BehaviorSubject<number>(0);
   intMod = new BehaviorSubject<number>(0);
   wisMod = new BehaviorSubject<number>(0);
   chaMod = new BehaviorSubject<number>(0);
-
+  ac = new BehaviorSubject<number>(0)
   constructor(
     private characterService: CharacterService,
     private fb: FormBuilder,
@@ -42,7 +45,7 @@ export class CharacterSheetComponent implements OnInit {
     this.character = this.characterService.subscribeCharacter().pipe(
       tap((char) => {
         this.initForm();
-        this.updateCalculatedFields();
+        //this.updateCalculatedFields();
         this.onChanges();
         if (char) this.charEdit.patchValue(char);
 
@@ -51,7 +54,7 @@ export class CharacterSheetComponent implements OnInit {
     this.character.subscribe(
       (char) => {
         this.charReference = char;
-        this.updateCalculatedFields()
+        //this.updateCalculatedFields()
       },
       (err) => {
         router.navigate(['characters']);
@@ -69,9 +72,10 @@ export class CharacterSheetComponent implements OnInit {
   initForm() {
     this.charEdit = this.fb.group({
       id: [''],
+      //general
       characterName: [''],
       alignment: [''],
-      level: [''],
+      level: [1],
       diety: [''],
       homeland: [''],
       race: [''],
@@ -82,23 +86,42 @@ export class CharacterSheetComponent implements OnInit {
       weight: [''],
       hair: [''],
       eyes: [''],
-      strAbilityScore: [''],
-      tempStrengthScore: [''],
-      dexAbilityScore: [''],
-      tempDexScore: [''],
-      conAbilityScore: [''],
-      tempConScore:['']
+      //abilities
+      strAbilityScore: [10],
+      tempStrScore: [0],
+      dexAbilityScore: [10],
+      tempDexScore: [0],
+      conAbilityScore: [10],
+      tempConScore:[0],
+      intAbilityScore: [10],
+      tempIntScore: [0],
+      wisAbilityScore: [10],
+      tempWisScore: [0],
+      chaAbilityScore: [10],
+      tempChaScore: [0],
+      //defense
+      tempACMod: [0],
+        //tempAC
+        //hp
+        //hp tracking
+        //dr
+        //sr
+        //saves
     });
   }
 
-  updateCalculatedFields() {
-    this.strMod.next(Math.floor((this.charReference?.strAbilityScore - 10) / 2));
-    this.dexMod.next(Math.floor((this.charReference?.dexAbilityScore - 10) / 2));
-    this.conMod.next(Math.floor((this.charReference?.conAbilityScore - 10) / 2));
-    //this.intMod.next(Math.floor((this.charReference?.intAbilityScore - 10) / 2));
-    //this.wisMod.next(Math.floor((this.charReference?.wisAbilityScore - 10) / 2));
-    //this.chaMod.next(Math.floor((this.charReference?.chaAbilityScore - 10) / 2));
-  }
+  // updateCalculatedFields() {
+  //   this.strMod.next(Math.floor((this.charReference?.strAbilityScore + this.charReference?.tempStrScore - 10) / 2));
+  //   this.dexMod.next(Math.floor((this.charReference?.dexAbilityScore + this.charReference?.tempDexScore - 10) / 2));
+  //   this.conMod.next(Math.floor((this.charReference?.conAbilityScore + this.charReference?.tempConScore - 10) / 2));
+  //   this.intMod.next(Math.floor((this.charReference?.intAbilityScore + this.charReference?.tempIntScore - 10) / 2));
+  //   this.wisMod.next(Math.floor((this.charReference?.wisAbilityScore + this.charReference?.tempWisScore - 10) / 2));
+  //   this.chaMod.next(Math.floor((this.charReference?.chaAbilityScore + this.charReference?.tempChaScore - 10) / 2));
+  //   this.ac.next(10 + this.dexMod.value + this.charReference?.tempACMod);
+  //   console.log(this.charReference?.strAbilityScore)
+  //   console.log(this.charReference?.tempStrScore)
+  //   Math.floor((this.charReference?.strAbilityScore + this.charReference?.tempStrScore - 10) / 2)
+  // }
 
   onChanges() {
     this.charEdit.valueChanges
