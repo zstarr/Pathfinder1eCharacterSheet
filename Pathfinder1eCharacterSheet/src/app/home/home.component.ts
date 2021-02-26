@@ -27,7 +27,8 @@ export class HomeComponent implements OnInit {
 
   async login() {
     await this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-    this.router.navigate(['characters']);
+    this.router.navigate(['character']);
+
   }
   logout() {
     this.charService.logout();

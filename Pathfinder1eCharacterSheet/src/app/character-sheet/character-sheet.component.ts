@@ -1,5 +1,4 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Character } from '../core/models/character.model';
 import { CharacterService } from '../core/services/character.service';
@@ -11,33 +10,27 @@ import {
 } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-character-sheet',
   templateUrl: './character-sheet.component.html',
   styleUrls: ['./character-sheet.component.scss'],
 })
-export class CharacterSheetComponent implements OnInit {
+export class CharacterSheetComponent implements OnInit, OnDestroy {
 
   Math = Math;
-
   character: Observable<any>;
-
+  charEditSub: Subscription;
+  charSub: Subscription;
   charEdit: FormGroup;
   charReference: Character;
 
-  get strMod(): number { return Math.floor((this.charReference?.strAbilityScore + this.charReference?.tempStrScore - 10) / 2) };
-  dexMod = new BehaviorSubject<number>(0);
-  conMod = new BehaviorSubject<number>(0);
-  intMod = new BehaviorSubject<number>(0);
-  wisMod = new BehaviorSubject<number>(0);
-  chaMod = new BehaviorSubject<number>(0);
-  ac = new BehaviorSubject<number>(0)
+  get dexMod(): number {return Math.floor((this.charReference?.dexAbilityScore + this.charReference?.tempDexScore - 10) / 2);}
+
   constructor(
     private characterService: CharacterService,
     private fb: FormBuilder,
-    private afAuth: AngularFireAuth,
     private router: Router,
     public dialog: MatDialog
   ) {
@@ -45,22 +38,24 @@ export class CharacterSheetComponent implements OnInit {
     this.character = this.characterService.subscribeCharacter().pipe(
       tap((char) => {
         this.initForm();
-        //this.updateCalculatedFields();
         this.onChanges();
         if (char) this.charEdit.patchValue(char);
 
       })
     );
-    this.character.subscribe(
+    this.charSub = this.character.subscribe(
       (char) => {
         this.charReference = char;
-        //this.updateCalculatedFields()
       },
       (err) => {
         router.navigate(['characters']);
       }
     );
 
+  }
+  ngOnDestroy(): void {
+    if (this.charSub) this.charSub.unsubscribe();
+    if (this.charEditSub) this.charEditSub.unsubscribe();
   }
 
   ngOnInit(): void {}
@@ -110,21 +105,8 @@ export class CharacterSheetComponent implements OnInit {
     });
   }
 
-  // updateCalculatedFields() {
-  //   this.strMod.next(Math.floor((this.charReference?.strAbilityScore + this.charReference?.tempStrScore - 10) / 2));
-  //   this.dexMod.next(Math.floor((this.charReference?.dexAbilityScore + this.charReference?.tempDexScore - 10) / 2));
-  //   this.conMod.next(Math.floor((this.charReference?.conAbilityScore + this.charReference?.tempConScore - 10) / 2));
-  //   this.intMod.next(Math.floor((this.charReference?.intAbilityScore + this.charReference?.tempIntScore - 10) / 2));
-  //   this.wisMod.next(Math.floor((this.charReference?.wisAbilityScore + this.charReference?.tempWisScore - 10) / 2));
-  //   this.chaMod.next(Math.floor((this.charReference?.chaAbilityScore + this.charReference?.tempChaScore - 10) / 2));
-  //   this.ac.next(10 + this.dexMod.value + this.charReference?.tempACMod);
-  //   console.log(this.charReference?.strAbilityScore)
-  //   console.log(this.charReference?.tempStrScore)
-  //   Math.floor((this.charReference?.strAbilityScore + this.charReference?.tempStrScore - 10) / 2)
-  // }
-
   onChanges() {
-    this.charEdit.valueChanges
+    this.charEditSub = this.charEdit.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged(), pairwise())
       .subscribe(([prevVal, nextVal]: [any, any]) => {
         this.characterService.saveCharacter(nextVal);

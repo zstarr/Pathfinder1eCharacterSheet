@@ -25,6 +25,7 @@ export class CharacterService {
     null
   );
 
+  afAuthSub: Subscription;
   afUserSub: Subscription;
   loadedCharacterSub: Subscription;
   lastViewedSub: Subscription;
@@ -36,7 +37,7 @@ export class CharacterService {
     private afAuth: AngularFireAuth
     ) {
     this.database = db;
-    this.afAuth.authState.subscribe(user => {
+    this.afAuthSub = this.afAuth.authState.subscribe(user => {
       if (user?.uid) {
         this.characterDbString = 'users/' + user.uid + '/pathfinder1echaractersheets';
         this.updateCharacters();
@@ -46,7 +47,9 @@ export class CharacterService {
   }
 
   loadCharacter(id: number) {
-    this.afUserSub = this.loadedCharacterSub = this.db.object(this.characterDbString + '/characters/' + id).valueChanges().subscribe(char => {
+    if (this.loadedCharacterSub) this.loadedCharacterSub.unsubscribe();
+
+    this.loadedCharacterSub = this.db.object(this.characterDbString + '/characters/' + id).valueChanges().subscribe(char => {
       if(char) {
         this.character.next(char as Character);
         this.updateLastViewedCharacterById(id);
@@ -109,6 +112,7 @@ export class CharacterService {
   }
 
   logout() {
+    if (this.afAuthSub) this.afAuthSub.unsubscribe();
     if (this.afUserSub) this.afUserSub.unsubscribe();
     if (this.character) this.character.unsubscribe();
     if (this.lastViewedSub) this.lastViewedSub.unsubscribe();
