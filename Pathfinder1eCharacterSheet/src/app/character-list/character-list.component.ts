@@ -19,7 +19,7 @@ export class CharacterListComponent implements OnInit, OnDestroy {
     private characterService: CharacterService,
     private router: Router,
   ) {
-    this.charsSub = this.characterService.characters.subscribe(
+    this.charsSub = this.characterService.allCharacters.subscribe(
       (chars) => (this.characters = chars)
     );
   }

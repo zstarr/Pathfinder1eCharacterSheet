@@ -7,10 +7,11 @@ import {
   distinctUntilChanged,
   pairwise,
   tap,
+  throttleTime,
 } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, Subscription } from 'rxjs';
+import { asyncScheduler, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-character-sheet',
@@ -19,53 +20,33 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class CharacterSheetComponent implements OnInit, OnDestroy {
 
-  Math = Math;
   character: Observable<any>;
-  charEditSub: Subscription;
-  charSub: Subscription;
-  charEdit: FormGroup;
-  charReference: Character;
-
-  get dexMod(): number {return Math.floor((this.charReference?.dexAbilityScore + this.charReference?.tempDexScore - 10) / 2);}
+  charSheetChangeSub: Subscription;
+  charForm: FormGroup;
 
   constructor(
-    private characterService: CharacterService,
+    public characterService: CharacterService,
     private fb: FormBuilder,
     private router: Router,
     public dialog: MatDialog
   ) {
     this.initForm();
-    this.character = this.characterService.subscribeCharacter().pipe(
+    this.character = this.characterService.character.pipe(
       tap((char) => {
         this.initForm();
         this.onChanges();
-        if (char) this.charEdit.patchValue(char);
-
+        if (char) this.charForm.patchValue(char);
       })
     );
-    this.charSub = this.character.subscribe(
-      (char) => {
-        this.charReference = char;
-      },
-      (err) => {
-        router.navigate(['characters']);
-      }
-    );
-
   }
   ngOnDestroy(): void {
-    if (this.charSub) this.charSub.unsubscribe();
-    if (this.charEditSub) this.charEditSub.unsubscribe();
+    if (this.charSheetChangeSub) this.charSheetChangeSub.unsubscribe();
   }
 
   ngOnInit(): void {}
 
-  scroll(el: HTMLElement) {
-    el.scrollIntoView();
-  }
-
   initForm() {
-    this.charEdit = this.fb.group({
+    this.charForm = this.fb.group({
       id: [''],
       //general
       characterName: [''],
@@ -82,20 +63,20 @@ export class CharacterSheetComponent implements OnInit, OnDestroy {
       hair: [''],
       eyes: [''],
       //abilities
-      strAbilityScore: [10],
-      tempStrScore: [0],
-      dexAbilityScore: [10],
-      tempDexScore: [0],
-      conAbilityScore: [10],
-      tempConScore:[0],
-      intAbilityScore: [10],
-      tempIntScore: [0],
-      wisAbilityScore: [10],
-      tempWisScore: [0],
-      chaAbilityScore: [10],
-      tempChaScore: [0],
+      strAbilityScore: [''],
+      tempStrScore: [''],
+      dexAbilityScore: [''],
+      tempDexScore: [''],
+      conAbilityScore: [''],
+      tempConScore:[''],
+      intAbilityScore: [''],
+      tempIntScore: [''],
+      wisAbilityScore: [''],
+      tempWisScore: [''],
+      chaAbilityScore: [''],
+      tempChaScore: [''],
       //defense
-      tempACMod: [0],
+      tempACMod: [''],
         //tempAC
         //hp
         //hp tracking
@@ -103,11 +84,17 @@ export class CharacterSheetComponent implements OnInit, OnDestroy {
         //sr
         //saves
     });
+
   }
 
   onChanges() {
-    this.charEditSub = this.charEdit.valueChanges
-      .pipe(debounceTime(500), distinctUntilChanged(), pairwise())
+
+    this.charSheetChangeSub = this.charForm.valueChanges
+      .pipe(
+        throttleTime(500, asyncScheduler, {leading: true, trailing: true}),
+        distinctUntilChanged(),
+        pairwise()
+      )
       .subscribe(([prevVal, nextVal]: [any, any]) => {
         this.characterService.saveCharacter(nextVal);
       });
@@ -124,12 +111,16 @@ export class CharacterSheetComponent implements OnInit, OnDestroy {
   }
 
   deleteForever() {
-    this.characterService.deleteCharacter(this.charReference);
+    this.characterService.deleteActiveCharacter();
     this.router.navigate(['characters']);
   }
 
   printCharacter() {
     console.log(this.character);
+  }
+
+  scroll(el: HTMLElement) {
+    el.scrollIntoView();
   }
 }
 

@@ -50,9 +50,13 @@ import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { CharacterListComponent } from './character-list/character-list.component';
+import { AbilitiesComponent } from './character-sheet/abilities/abilities.component';
+import { GeneralComponent } from './character-sheet/general/general.component';
+import { DefenseComponent } from './character-sheet/defense/defense.component';
+import { SpellsComponent } from './character-sheet/spells/spells.component';
 
 @NgModule({
-  declarations: [AppComponent, CharacterSheetComponent, CharacterDeleteDialog, HomeComponent, CharacterListComponent],
+  declarations: [AppComponent, CharacterSheetComponent, CharacterDeleteDialog, HomeComponent, CharacterListComponent, AbilitiesComponent, GeneralComponent, DefenseComponent, SpellsComponent],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),

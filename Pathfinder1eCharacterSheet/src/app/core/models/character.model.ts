@@ -2,7 +2,7 @@ export class Character {
   id: number;
   characterName: string;
   alignment: string;
-  level: number;
+  level: number = 1;
   diety: string;
   homeland: string;
   race: string;
@@ -15,22 +15,22 @@ export class Character {
   eyes: string;
 
   //Abilities
-  strAbilityScore: number;
-  tempStrScore: number;
-  dexAbilityScore: number;
-  tempDexScore: number;
-  conAbilityScore: number;
-  tempConScore: number;
+  strAbilityScore: number = 10;
+  tempStrScore: number = 0;
+  dexAbilityScore: number = 10;
+  tempDexScore: number = 0;
+  conAbilityScore: number = 10;
+  tempConScore: number = 0;
 
-  intAbilityScore: number;
-  tempIntScore: number;
-  wisAbilityScore: number;
-  tempWisScore: number;
-  chaAbilityScore: number;
-  tempChaScore: number;
+  intAbilityScore: number = 10;
+  tempIntScore: number = 0;
+  wisAbilityScore: number = 10;
+  tempWisScore: number = 0;
+  chaAbilityScore: number = 10;
+  tempChaScore: number = 0;
 
   //defense
-  tempACMod: number;
+  tempACMod: number = 0;
 
-  maxHp: number;
+  maxHp: number = 0;
 }

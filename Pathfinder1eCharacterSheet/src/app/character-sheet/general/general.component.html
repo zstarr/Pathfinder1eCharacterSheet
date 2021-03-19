@@ -1,0 +1,102 @@
+<div [formGroup]="formGroup">
+  <mat-card class="parent-card">
+    <mat-card-header>
+      <div mat-card-avatar>
+          <mat-icon class="avatar-icon">account_circle</mat-icon>
+      </div>
+      <mat-card-title>General</mat-card-title>
+      <mat-card-subtitle>Character Information</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+
+      <!-- Char Name -->
+      <mat-form-field appearance="standard">
+        <mat-label>Character Name</mat-label>
+        <input matInput placeholder="Character Name" formControlName="characterName">
+      </mat-form-field>
+
+      <!-- Alignment -->
+      <mat-form-field appearance="fill">
+        <mat-label>Alignment</mat-label>
+        <mat-select formControlName="alignment">
+          <mat-option value="lg">Lawful Good</mat-option>
+          <mat-option value="ng">Neutral Good</mat-option>
+          <mat-option value="cg">Chaotic Good</mat-option>
+          <mat-option value="ln">Lawful Neutral</mat-option>
+          <mat-option value="tn">Neutral</mat-option>
+          <mat-option value="cn">Chaotic Neutral</mat-option>
+          <mat-option value="le">Lawful Evil</mat-option>
+          <mat-option value="ne">Neutral Evil</mat-option>
+          <mat-option value="ce">Chaotic Evil</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Level -->
+      <mat-form-field appearance="standard">
+        <mat-label>Character Level</mat-label>
+        <input matInput placeholder="Character Level" formControlName="level" type="number" min="1" max="20">
+      </mat-form-field>
+
+      <!-- Diety -->
+      <mat-form-field appearance="standard">
+        <mat-label>Diety</mat-label>
+        <input matInput placeholder="Diety" formControlName="diety">
+      </mat-form-field>
+
+      <!-- Homeland -->
+      <mat-form-field appearance="standard">
+        <mat-label>Homeland</mat-label>
+        <input matInput placeholder="Homeland" formControlName="homeland">
+      </mat-form-field>
+
+      <!-- Race -->
+      <mat-form-field appearance="standard">
+        <mat-label>Race</mat-label>
+        <input matInput placeholder="Race" formControlName="race">
+      </mat-form-field>
+
+      <!-- Size -->
+      <mat-form-field appearance="standard">
+        <mat-label>Size</mat-label>
+        <input matInput placeholder="Size" formControlName="size">
+      </mat-form-field>
+
+      <!-- Gender -->
+      <mat-form-field appearance="standard">
+        <mat-label>Gender</mat-label>
+        <input matInput placeholder="Gender" formControlName="gender">
+      </mat-form-field>
+
+      <!-- Age -->
+      <mat-form-field appearance="standard">
+        <mat-label>Age</mat-label>
+        <input matInput placeholder="Age" formControlName="age" type="number" min="0">
+      </mat-form-field>
+
+      <!-- Height -->
+      <mat-form-field appearance="standard">
+        <mat-label>Height</mat-label>
+        <input matInput placeholder="Height" formControlName="height">
+      </mat-form-field>
+
+      <!-- Weight -->
+      <mat-form-field appearance="standard">
+        <mat-label>Weight</mat-label>
+        <input matInput placeholder="Weight" formControlName="weight">
+      </mat-form-field>
+
+      <!-- Hair -->
+      <mat-form-field appearance="standard">
+        <mat-label>Hair</mat-label>
+        <input matInput placeholder="Hair" formControlName="hair">
+      </mat-form-field>
+
+      <!-- Eyes -->
+      <mat-form-field appearance="standard">
+        <mat-label>Eyes</mat-label>
+        <input matInput placeholder="Eyes" formControlName="eyes">
+      </mat-form-field>
+
+    </mat-card-content>
+  </mat-card>
+</div>

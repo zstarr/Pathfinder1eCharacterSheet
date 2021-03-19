@@ -5,31 +5,31 @@ import { Character } from '../models/character.model';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { pairwise } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CharacterService {
   private characterDbString: string;
-
-  private character = new BehaviorSubject<Character>(null);
-
-  activeCharacter = this.character.asObservable();
-
   database: AngularFireDatabase;
   user: firebase.User;
 
-  lastViewedCharId;
+  allCharacters: BehaviorSubject<Character[]> = new BehaviorSubject<Character[]>(null);
+  public character = new BehaviorSubject<Character>(null);
+  lastViewedCharId: number;
 
-  characters: BehaviorSubject<Character[]> = new BehaviorSubject<Character[]>(
-    null
-  );
-
-  afAuthSub: Subscription;
-  afUserSub: Subscription;
   loadedCharacterSub: Subscription;
   lastViewedSub: Subscription;
   updateCharsSub: Subscription;
+
+  strMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  dexMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  conMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  intMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  wisMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  chaMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  AC: BehaviorSubject<number> = new BehaviorSubject<number>(10);
 
   constructor(
     private router: Router,
@@ -37,12 +37,22 @@ export class CharacterService {
     private afAuth: AngularFireAuth
     ) {
     this.database = db;
-    this.afAuthSub = this.afAuth.authState.subscribe(user => {
+    this.afAuth.authState.subscribe(user => {
       if (user?.uid) {
         this.characterDbString = 'users/' + user.uid + '/pathfinder1echaractersheets';
         this.updateCharacters();
         this.lastViewedSub = this.getLastViewedCharacter();
       }
+    });
+
+    this.character.pipe(pairwise()).subscribe(([prevVal, nextVal]: [Character, Character]) => {
+      this.strMod.next(Math.floor((nextVal.strAbilityScore + nextVal.tempStrScore - 10) / 2));
+      this.dexMod.next(Math.floor((nextVal.dexAbilityScore + nextVal.tempDexScore - 10) / 2));
+      this.conMod.next(Math.floor((nextVal.conAbilityScore + nextVal.tempConScore - 10) / 2));
+      this.intMod.next(Math.floor((nextVal.intAbilityScore + nextVal.tempIntScore - 10) / 2));
+      this.wisMod.next(Math.floor((nextVal.wisAbilityScore + nextVal.tempWisScore - 10) / 2));
+      this.chaMod.next(Math.floor((nextVal.chaAbilityScore + nextVal.tempChaScore - 10) / 2));
+      this.AC.next(10 + this.dexMod.value + nextVal.tempACMod);
     });
   }
 
@@ -57,12 +67,8 @@ export class CharacterService {
     });
   }
 
-  subscribeCharacter(): Observable<any> {
-    return this.activeCharacter;
-  }
-
   newCharacter() {
-    var id = this.characters.value.length;
+    var id = this.allCharacters.value.length;
     if (!id) {
       id = 0;
     }
@@ -78,7 +84,7 @@ export class CharacterService {
       .list<Character>(this.characterDbString + '/characters')
       .valueChanges()
       .subscribe((chars) => {
-        this.characters.next(chars);
+        this.allCharacters.next(chars);
         if(chars.length == 0) this.router.navigate(['characters'])
       });
   }
@@ -93,15 +99,15 @@ export class CharacterService {
       .catch((error) => console.log('error saving char: ', error));
   }
 
-  deleteCharacter(character: Character) {
-    this.database.object(this.characterDbString + '/characters/' + character.id).remove();
+  deleteActiveCharacter() {
+    this.database.object(this.characterDbString + '/characters/' + this.character.value.id).remove();
   }
 
   getLastViewedCharacter(): Subscription {
     return this.database
       .object(this.characterDbString + '/lastViewedCharacter').valueChanges().subscribe(charId => {
         if (!charId) this.updateLastViewedCharacterById(0);
-        this.lastViewedCharId = charId;
+        this.lastViewedCharId = Number(charId);
         this.loadCharacter(this.lastViewedCharId);
       });
   }
@@ -116,5 +122,6 @@ export class CharacterService {
     if (this.loadedCharacterSub) this.loadedCharacterSub.unsubscribe();
     if (this.updateCharsSub) this.updateCharsSub.unsubscribe();
   }
+
 
 }
