@@ -1,47 +1,14 @@
 <form [formGroup]="charForm" *ngIf="character | async; else loading">
 
-  <div #general></div>
   <char-sheet-general [formGroup]="charForm"></char-sheet-general>
 
-  <div #abilities></div>
   <char-sheet-abilities [formGroup]="charForm"></char-sheet-abilities>
 
-  <div #defense></div>
   <char-sheet-defense [formGroup]="charForm"></char-sheet-defense>
 
-  <div #spells></div>
   <char-sheet-spells [formGroup]="charForm"></char-sheet-spells>
 
-  <mat-toolbar color="primary">
-    <button mat-icon-button (click)="scroll(general)">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-    <button mat-icon-button (click)="scroll(abilities)">
-      <mat-icon>psychology</mat-icon>
-    </button>
-    <button mat-icon-button (click)="scroll(defense)">
-      <mat-icon>shield</mat-icon>
-    </button>
-    <button mat-icon-button (click)="scroll(spells)">
-      <mat-icon>offline_bolt</mat-icon>
-    </button>
-    <span class="example-spacer"></span>
-    <button mat-icon-button (click)="openDialog()">
-      <mat-icon>delete_forever</mat-icon>
-    </button>
-    <!-- <button mat-icon-button>
-      <mat-icon>save</mat-icon>
-    </button>
-    <button mat-icon-button>
-      <mat-icon>share</mat-icon>
-    </button>
-    <button mat-icon-button>
-      <mat-icon>print</mat-icon>
-    </button>
-    <button mat-icon-button (click)="printCharacter()">
-      <mat-icon>download</mat-icon>
-    </button>-->
-  </mat-toolbar>
+  <char-sheet-nav-bar [character]="character"></char-sheet-nav-bar>
 </form>
 <ng-template #loading>
   Loading User...

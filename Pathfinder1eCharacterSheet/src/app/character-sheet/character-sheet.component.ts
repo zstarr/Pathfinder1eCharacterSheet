@@ -1,16 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Character } from '../core/models/character.model';
 import { CharacterService } from '../core/services/character.service';
 import {
-  debounceTime,
   distinctUntilChanged,
   pairwise,
   tap,
   throttleTime,
 } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+
 import { asyncScheduler, Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -27,8 +24,6 @@ export class CharacterSheetComponent implements OnInit, OnDestroy {
   constructor(
     public characterService: CharacterService,
     private fb: FormBuilder,
-    private router: Router,
-    public dialog: MatDialog
   ) {
     this.initForm();
     this.character = this.characterService.character.pipe(
@@ -39,6 +34,7 @@ export class CharacterSheetComponent implements OnInit, OnDestroy {
       })
     );
   }
+
   ngOnDestroy(): void {
     if (this.charSheetChangeSub) this.charSheetChangeSub.unsubscribe();
   }
@@ -100,32 +96,4 @@ export class CharacterSheetComponent implements OnInit, OnDestroy {
       });
   }
 
-  openDialog() {
-    const dialogRef = this.dialog.open(CharacterDeleteDialog);
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.deleteForever();
-      }
-    });
-  }
-
-  deleteForever() {
-    this.characterService.deleteActiveCharacter();
-    this.router.navigate(['characters']);
-  }
-
-  printCharacter() {
-    console.log(this.character);
-  }
-
-  scroll(el: HTMLElement) {
-    el.scrollIntoView();
-  }
 }
-
-@Component({
-  selector: 'character-delete',
-  templateUrl: 'character-delete.html',
-})
-export class CharacterDeleteDialog {}
