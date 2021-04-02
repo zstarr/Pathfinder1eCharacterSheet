@@ -1,3 +1,5 @@
+import { CharacterSize } from "./character-size.model";
+
 export class Character {
   id: number;
   characterName: string;
@@ -6,7 +8,7 @@ export class Character {
   diety: string;
   homeland: string;
   race: string;
-  size: string;
+  size: CharacterSize;
   gender: string;
   age: number;
   height: string;

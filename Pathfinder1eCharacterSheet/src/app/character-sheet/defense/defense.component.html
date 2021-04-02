@@ -8,6 +8,7 @@
       <mat-card-subtitle>It's just a flesh wound...</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
+
       <!-- AC -->
       <mat-form-field appearance="standard">
         <mat-label>AC</mat-label>
@@ -17,6 +18,15 @@
         <mat-label>Other AC Mod</mat-label>
         <input matInput type="number" placeholder="Temp AC mod" formControlName="tempACMod">
       </mat-form-field>
+
+      <!-- Armor Mod-->
+      <mat-form-field appearance="standard">
+        <mat-label>Armor Mod</mat-label>
+        <input matInput placeholder="Armor Mod" type="number" disabled value="{{ characterService.armorMod| async }}">
+      </mat-form-field>
+
+
+
     </mat-card-content>
   </mat-card>
 </div>

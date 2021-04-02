@@ -6,6 +6,7 @@ import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { pairwise } from 'rxjs/operators';
+import { CharacterSizes } from "../models/character-size.model";
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,8 @@ export class CharacterService {
   lastViewedSub: Subscription;
   updateCharsSub: Subscription;
 
+  characterSizes = CharacterSizes;
+
   strMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   dexMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   conMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -30,6 +33,7 @@ export class CharacterService {
   wisMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   chaMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   AC: BehaviorSubject<number> = new BehaviorSubject<number>(10);
+  armorMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor(
     private router: Router,
@@ -46,14 +50,19 @@ export class CharacterService {
     });
 
     this.character.pipe(pairwise()).subscribe(([prevVal, nextVal]: [Character, Character]) => {
-      this.strMod.next(Math.floor((nextVal.strAbilityScore + nextVal.tempStrScore - 10) / 2));
-      this.dexMod.next(Math.floor((nextVal.dexAbilityScore + nextVal.tempDexScore - 10) / 2));
-      this.conMod.next(Math.floor((nextVal.conAbilityScore + nextVal.tempConScore - 10) / 2));
-      this.intMod.next(Math.floor((nextVal.intAbilityScore + nextVal.tempIntScore - 10) / 2));
-      this.wisMod.next(Math.floor((nextVal.wisAbilityScore + nextVal.tempWisScore - 10) / 2));
-      this.chaMod.next(Math.floor((nextVal.chaAbilityScore + nextVal.tempChaScore - 10) / 2));
-      this.AC.next(10 + this.dexMod.value + nextVal.tempACMod);
+      this.updateAbilityScores(nextVal);
+      console.log(nextVal)
+      this.AC.next(10 + this.dexMod.value + nextVal.tempACMod + this.armorMod.value + nextVal.size.mod);
     });
+  }
+
+  updateAbilityScores(char: Character) {
+    this.strMod.next(Math.floor((char.strAbilityScore + char.tempStrScore - 10) / 2));
+    this.dexMod.next(Math.floor((char.dexAbilityScore + char.tempDexScore - 10) / 2));
+    this.conMod.next(Math.floor((char.conAbilityScore + char.tempConScore - 10) / 2));
+    this.intMod.next(Math.floor((char.intAbilityScore + char.tempIntScore - 10) / 2));
+    this.wisMod.next(Math.floor((char.wisAbilityScore + char.tempWisScore - 10) / 2));
+    this.chaMod.next(Math.floor((char.chaAbilityScore + char.tempChaScore - 10) / 2));
   }
 
   loadCharacter(id: number) {
@@ -122,6 +131,5 @@ export class CharacterService {
     if (this.loadedCharacterSub) this.loadedCharacterSub.unsubscribe();
     if (this.updateCharsSub) this.updateCharsSub.unsubscribe();
   }
-
 
 }

@@ -73,7 +73,6 @@ export class CharacterSheetComponent implements OnInit, OnDestroy {
       tempChaScore: [''],
       //defense
       tempACMod: [''],
-        //tempAC
         //hp
         //hp tracking
         //dr
