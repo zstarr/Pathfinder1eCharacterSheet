@@ -51,8 +51,8 @@ export class CharacterService {
 
     this.character.pipe(pairwise()).subscribe(([prevVal, nextVal]: [Character, Character]) => {
       this.updateAbilityScores(nextVal);
-      console.log(nextVal)
-      this.AC.next(10 + this.dexMod.value + nextVal.tempACMod + this.armorMod.value + nextVal.size.mod);
+      let sizeMod = nextVal.size?.mod ? nextVal.size.mod : 0;
+      this.AC.next(10 + this.dexMod.value + nextVal.tempACMod + this.armorMod.value + sizeMod);
     });
   }
 
