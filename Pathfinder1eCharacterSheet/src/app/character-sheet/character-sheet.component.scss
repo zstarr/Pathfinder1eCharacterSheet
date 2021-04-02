@@ -12,3 +12,8 @@ mat-form-field {
 .avatar-icon {
   font-size: 40px;
 }
+
+.window {
+  height: calc(100vh - 124px);
+  overflow: auto;
+}
