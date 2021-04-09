@@ -33,7 +33,14 @@ export class CharacterService {
   wisMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   chaMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   AC: BehaviorSubject<number> = new BehaviorSubject<number>(10);
+  touchAC: BehaviorSubject<number> = new BehaviorSubject<number>(10);
+  flatFootedAC: BehaviorSubject<number> = new BehaviorSubject<number>(10);
   armorMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  sizeMod: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
+  fortSave: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  refSave: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  willSave: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor(
     private router: Router,
@@ -51,9 +58,17 @@ export class CharacterService {
 
     this.character.pipe(pairwise()).subscribe(([prevVal, nextVal]: [Character, Character]) => {
       this.updateAbilityScores(nextVal);
-      let sizeMod = nextVal.size?.mod ? nextVal.size.mod : 0;
-      this.AC.next(10 + this.dexMod.value + nextVal.tempACMod + this.armorMod.value + sizeMod);
+      this.sizeMod.next(nextVal.size?.mod ? nextVal.size.mod : 0)
+      this.AC.next(10 + this.dexMod.value + nextVal.tempACMod + this.armorMod.value + this.sizeMod.value);
+      this.flatFootedAC.next(this.AC.value - this.dexMod.value);
+      this.touchAC.next(this.AC.value - this.armorMod.value); // - armor/shield/natural
     });
+  }
+
+  updateSaveScores(char: Character) {
+    this.fortSave.next(char.fortSaveMod + this.conMod.value);
+    this.refSave.next(char.refSaveMod + this.dexMod.value);
+    this.willSave.next(char.willSaveMod + this.wisMod.value);
   }
 
   updateAbilityScores(char: Character) {

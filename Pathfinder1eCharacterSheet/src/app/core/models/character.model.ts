@@ -31,6 +31,11 @@ export class Character {
   chaAbilityScore: number = 10;
   tempChaScore: number = 0;
 
+  //Saves
+  fortSaveMod: number = 0;
+  refSaveMod: number = 0;
+  willSaveMod: number = 0;
+
   //defense
   tempACMod: number = 0;
 
