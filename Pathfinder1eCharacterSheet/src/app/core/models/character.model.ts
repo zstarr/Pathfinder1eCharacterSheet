@@ -39,5 +39,6 @@ export class Character {
   //defense
   tempACMod: number = 0;
 
-  maxHp: number = 0;
+  totalHp: number = 0;
+  currentHp: number = 0;
 }

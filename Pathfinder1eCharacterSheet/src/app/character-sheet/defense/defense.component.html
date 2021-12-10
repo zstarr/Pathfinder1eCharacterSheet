@@ -73,6 +73,20 @@
         <input matInput placeholder="Will Save" type="number" disabled value="{{ characterService.willSave | async }}">
       </mat-form-field>
 
+      <br>
+
+      <!-- HP - current -->
+      <mat-form-field appearance="standard">
+        <mat-label>Current HP</mat-label>
+        <input matInput placeholder="Current HP" type="number"  formControlName="currentHp">
+      </mat-form-field>
+
+      <!-- HP - max -->
+      <mat-form-field appearance="standard">
+        <mat-label>Total HP</mat-label>
+        <input matInput placeholder="Total HP" type="number"  formControlName="totalHp">
+      </mat-form-field>
+
     </mat-card-content>
   </mat-card>
 </div>
